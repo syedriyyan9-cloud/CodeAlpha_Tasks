@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center min-vh-100 align-items-center">
+    <div class="col-md-6 text-center">
+        <div class="card shadow-lg">
+            <div class="card-body p-5">
+                <h1 class="display-4 mb-4">Welcome!</h1>
+                <p class="lead mb-4">Join events or register new ones in your community</p>
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg px-4">Login</a>
+                    <a href="{% url 'users:registration' %}" class="btn btn-success btn-lg px-4">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

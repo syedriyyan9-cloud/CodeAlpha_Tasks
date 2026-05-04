@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">My Registered Events</h2>
+{% if events %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for event in events %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-success">
+            <div class="card-body">
+                <h5 class="card-title text-success">{{ event.event_name }}</h5>
+                <p class="card-text">{{ event.event_details|truncatewords:30 }}</p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <strong>Venue:</strong> {{ event.event_venue }}<br>
+                        <strong>Date:</strong> {{ event.event_date|date:"F j, Y, g:i a" }}
+                    </small>
+                </p>
+                <form method="post" action="{% url 'users:cancel_registration' event.id %}" class="d-grid">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure you want to cancel this registration?')" class="btn btn-danger">Cancel Registration</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-warning text-center">
+    <p class="mb-0">You are not registered to any events. <a href="{% url 'users:event_list' %}" class="alert-link">Browse events</a></p>
+</div>
+{% endif %}
+{% endblock %}
