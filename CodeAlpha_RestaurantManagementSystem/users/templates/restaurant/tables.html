@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">🍽️ Check Table Availability</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Availability Checker</h4>
+                </div>
+                <div class="card-body">
+                    <form method="get">
+                        {% bootstrap_form form %}
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">Check Availability</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if availability_results %}
+        <div class="mt-5">
+            <div class="alert alert-info text-center">
+                <h5 class="mb-0">
+                    📅 Results for {{ form.cleaned_data.date }} at {{ form.cleaned_data.time }} 
+                    <br>👥 {{ form.cleaned_data.people }} people
+                </h5>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Table Number</th>
+                            <th>Capacity</th>
+                            <th>Can Accommodate?</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in availability_results %}
+                            <tr>
+                                <td><span class="badge bg-secondary">Table {{ result.table.table_number }}</span></td>
+                                <td>{{ result.table.capacity }}  seats</td>
+                                <td>
+                                    {% if result.can_accommodate %}
+                                        <span class="badge bg-success">✓ Yes</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">✗ No</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if result.is_available %}
+                                        <span class="badge bg-success">Available</span>
+                                    {% elif result.is_reserved %}
+                                        <span class="badge bg-danger">Already Reserved</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Too small for your party</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if result.is_available %}
+                                        <a href="{% url 'users:reservations' %}?table={{ result.table.id }}&date={{ form.cleaned_data.date }}&time={{ form.cleaned_data.time }}&people={{ form.cleaned_data.people }}" 
+                                           class="btn btn-success btn-sm">
+                                            Reserve This Table
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted">Not Available</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'users:reservations' %}" class="btn btn-outline-primary">📋 View My Reservations</a>
+    </div>
+</div>
+{% endblock %}

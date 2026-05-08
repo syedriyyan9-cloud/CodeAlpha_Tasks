@@ -1,7 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<p>hello</p>
-
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm mt-4">
+            <div class="card-header bg-dark text-white text-center">
+                <h2 class="mb-0">Welcome, {{ user.username }}!</h2>
+            </div>
+            <div class="card-body">
+                <p class="text-muted text-center mb-4">What would you like to do today?</p>
+                
+                <div class="d-grid gap-3">
+                    <a href="{% url 'users:menu' %}" class="btn btn-primary btn-lg">
+                        📋 View Menu
+                    </a>
+                    <a href="{% url 'users:user_order' %}" class="btn btn-info btn-lg text-white">
+                        🧾 My Orders
+                    </a>
+                    <a href="{% url 'users:reservations' %}" class="btn btn-success btn-lg">
+                        📅 Make Reservations
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>Restaurant Management System</small>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

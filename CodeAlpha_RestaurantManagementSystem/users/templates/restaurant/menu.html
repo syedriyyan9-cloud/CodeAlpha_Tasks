@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="text-center mb-4">Our Menu</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if menu_items %}
+                <div class="row">
+                    {% for dish in menu_items %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title text-primary fw-bold">{{ dish.name }}</h5>
+                                            <p class="card-text text-muted small">{{ dish.description }}</p>
+                                            <p class="fw-bold text-success">${{ dish.price }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    {% if dish.is_available %}
+                                        <div class="quantity-control mt-3">
+                                            <label class="form-label fw-bold">Quantity:</label>
+                                            <div class="input-group" style="width: 150px;">
+                                                <button type="button" class="btn btn-outline-danger minus-btn" data-id="{{ dish.id }}">-</button>
+                                                {{ form|get_item:dish.id }}
+                                                <button type="button" class="btn btn-outline-success plus-btn" data-id="{{ dish.id }}">+</button>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-danger text-center mt-2 mb-0 py-1">
+                                            <small>❌ Dish not available</small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <div class="additional-notes">
+                        <label for="{{ form.additional_notes.id_for_label }}" class="form-label fw-bold">
+                            📝 Special instructions:
+                        </label>
+                        {{ form.additional_notes }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-5">
+                    ✅ Submit Order
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Get all plus and minus buttons
+    const plusButtons = document.querySelectorAll('.plus-btn');
+    const minusButtons = document.querySelectorAll('.minus-btn');
+    
+    // Function to get the quantity input for a specific dish
+    function getQuantityInput(dishId) {
+        return document.querySelector(`input[name="quantity_${dishId}"]`);
+    }
+    
+    // Add event listeners to plus buttons
+    plusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const dishId = this.getAttribute('data-id');
+            const input = getQuantityInput(dishId);
+            let currentValue = parseInt(input.value) || 0;
+            input.value = currentValue + 1;
+        });
+    });
+    
+    // Add event listeners to minus buttons
+    minusButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const dishId = this.getAttribute('data-id');
+            const input = getQuantityInput(dishId);
+            let currentValue = parseInt(input.value) || 0;
+            if (currentValue > 0) {
+                input.value = currentValue - 1;
+            }
+        });
+    });
+</script>
+
+<style>
+    /* Make number inputs smaller and centered */
+    input[type="number"] {
+        text-align: center;
+        width: 60px;
+        border-radius: 0;
+        border: 1px solid #ced4da;
+    }
+    input[type="number"]:focus {
+        outline: none;
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    /* Remove spinner buttons on number input */
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button {
+        opacity: 0.5;
+    }
+</style>
+{% endblock %}

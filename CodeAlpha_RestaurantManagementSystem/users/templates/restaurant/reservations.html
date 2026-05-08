@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center mb-4">📅 Make a Reservation</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-5">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Reservation Form</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-success btn-lg">Reserve Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <hr class="my-5">
+    
+    <h2 class="text-center mb-4">⭐ My Future Reservations</h2>
+    {% if future_reservations %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Table Number</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Number of People</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in future_reservations %}
+                        <tr>
+                            <td><span class="badge bg-secondary">Table {{ reservation.table.table_number }}</span></td>
+                            <td>{{ reservation.date }}</td>
+                            <td>{{ reservation.time }}</td>
+                            <td>{{ reservation.number_of_people }}</td>
+                            <td>
+                                <span class="badge {% if reservation.status == 'confirmed' %}bg-success{% elif reservation.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ reservation.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if reservation.status != 'cancelled' %}
+                                    <a href="{% url 'users:cancel_reservation' reservation.id %}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Cancel this reservation?')">
+                                        Cancel
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">No future reservations found.</p>
+        </div>
+    {% endif %}
+    
+    <h2 class="text-center mb-4 mt-5">📜 Past Reservations</h2>
+    {% if past_reservations %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Table Number</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Number of People</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in past_reservations %}
+                        <tr>
+                            <td><span class="badge bg-secondary">Table {{ reservation.table.table_number }}</span></td>
+                            <td>{{ reservation.date }}</td>
+                            <td>{{ reservation.time }}</td>
+                            <td>{{ reservation.number_of_people }}</td>
+                            <td>
+                                <span class="badge {% if reservation.status == 'confirmed' %}bg-success{% elif reservation.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ reservation.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-secondary text-center">
+            <p class="mb-0">No past reservations found.</p>
+        </div>
+    {% endif %}
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'users:tables' %}" class="btn btn-outline-primary">← Back to Check Tables</a>
+    </div>
+</div>
+{% endblock %}
