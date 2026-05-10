@@ -29,7 +29,7 @@ A full-featured web application built with Django that allows users to browse ev
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/syedriyyan9-cloud/Task-2-Event-Registration-System.git
+   git clone https://github.com/syedriyyan9-cloud/CodeAlpha_Tasks/tree/main/CodeAlpha_EventRegistrationSystem.git
    cd event_registration_system
 
 2. **Create virtual environment**
