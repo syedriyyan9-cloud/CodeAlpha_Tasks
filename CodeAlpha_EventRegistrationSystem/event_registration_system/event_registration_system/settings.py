@@ -80,6 +80,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'event_registration_system.wsgi.application'
 
+# Add your Vercel domain
+CSRF_TRUSTED_ORIGINS = [
+    'https://eventregistrationsystem-two.vercel.app/',
+    'https://*.vercel.app',
+]
+
+# CSRF and Security Settings
+CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app', 'https://*.now.sh']
+CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS (Vercel uses HTTPS)
+CSRF_COOKIE_HTTPONLY = False
+CSRF_USE_SESSIONS = False
+
+# Session Settings
+SESSION_COOKIE_SECURE = False  # Set to True for HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Important for Vercel
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
