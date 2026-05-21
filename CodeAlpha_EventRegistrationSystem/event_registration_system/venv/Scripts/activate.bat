@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set "VIRTUAL_ENV=D:\codealpha\Tasks\Task_2\event_registration_system\venv"
+set "VIRTUAL_ENV=D:\codealpha\CodeAlpha_tasks\CodeAlpha_EventRegistrationSystem\event_registration_system\venv"
 
 if not defined PROMPT set PROMPT=$P$G
 

@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-dummy'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-dummy')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 ROOT_URLCONF = 'event_registration_system.urls'
 
 TEMPLATES = [
@@ -79,11 +82,19 @@ WSGI_APPLICATION = 'event_registration_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR}/db.sqlite3',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
@@ -125,6 +136,9 @@ STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = 'users:profile' 
 LOGOUT_REDIRECT_URL = 'users:login'
 LOGIN_URL = 'users:login'
+# Add this right after your STATIC_URL configuration
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # <-- ADD THIS LINE
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
