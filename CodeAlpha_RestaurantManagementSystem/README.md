@@ -57,7 +57,7 @@ A full-featured web application built with **Django** that allows restaurants to
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/syedriyyan9-cloud/CodeAlpha/tree/main/CodeAlpha_RestaurantManagementSystem.git
+git clone https://github.com/syedriyyan9-cloud/CodeAlpha_Tasks/tree/main/CodeAlpha_RestaurantManagementSystem.git
 cd restaurant-management-system
 
 ## 2. Create Virtual environment
