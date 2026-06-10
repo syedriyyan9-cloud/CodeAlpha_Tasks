@@ -112,12 +112,19 @@ USE_X_FORWARDED_PORT = True
 #     }
 # }
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=f'sqlite:///{BASE_DIR}/db.sqlite3',
+#         conn_max_age=600,
+#         conn_health_checks=True,
+#     )
+# }
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR}/db.sqlite3',
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    "default": {
+        "ENGINE": "django_libsql",
+        "NAME": os.environ.get("TURSO_DB_URL"),
+        "AUTH_TOKEN": os.environ.get("TURSO_AUTH_TOKEN"),
+    }
 }
 
 # TEMPORARY - Just for running migrations locally
