@@ -87,7 +87,8 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # CSRF and Security Settings
-CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app', 'https://*.now.sh']
+CSRF_TRUSTED_ORIGINS = ["https://vercel.app",
+    "https://*.vercel.app"]
 CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS (Vercel uses HTTPS)
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
