@@ -96,6 +96,7 @@ CSRF_USE_SESSIONS = False
 SESSION_COOKIE_SECURE = False  # Set to True for HTTPS
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 # Important for Vercel
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
